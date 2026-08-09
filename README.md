@@ -21,30 +21,38 @@ L'environnement de développement repose sur **Docker** uniquement en tant que c
 
 ---
 
-## 🚀 Prise en main rapide
+## 🚀 Prise en main rapide (Une seule commande !)
 
-### 1. Construire l'image Docker de compilation
+Toute personne ayant **Docker** installé peut directement utiliser les scripts d'automatisation :
+
+### 1. Recompiler l'OS
 ```bash
+./build.sh
+```
+*Construit l'image Docker si nécessaire et compile `kernel.elf`.*
+
+### 2. Lancer l'OS dans le terminal
+```bash
+./run.sh
+```
+*Compile si besoin et lance l'émulateur QEMU directement dans ton terminal.*
+*(Pour quitter QEMU : presse `Ctrl + A` puis `X`)*
+
+---
+
+## 🛠️ Exécution manuelle via Docker
+
+Si tu préfères exécuter les étapes manuellement :
+
+```bash
+# 1. Construire l'image
 docker build -t dokos-env .
-```
 
-### 2. Compiler le Noyau (`kernel.elf`)
-Exécute la compilation au sein du conteneur sans rien installer sur ton système :
-```bash
+# 2. Compiler
 docker run --rm -v $(pwd):/workspace dokos-env make
-```
 
-### 3. Tester le Noyau avec QEMU
-
-* **Option A (Terminal text/nographic dans Docker) :**
-```bash
-docker run --rm -v $(pwd):/workspace dokos-env make qemu
-```
-*(Pour quitter QEMU en mode nographic : presse `Ctrl + A` puis `X`)*
-
-* **Option B (Si QEMU est installé sur ton Mac pour l'interface graphique) :**
-```bash
-qemu-system-i386 -kernel kernel.elf
+# 3. Lancer dans QEMU
+docker run --rm -it -v $(pwd):/workspace dokos-env make qemu
 ```
 
 ---
