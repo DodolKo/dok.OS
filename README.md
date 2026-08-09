@@ -10,12 +10,14 @@ L'environnement de développement repose sur **Docker** uniquement en tant que c
 
 ```text
 .
-├── Dockerfile        # Environnement de compilation minimal (GCC 32-bit, NASM, QEMU, Linker)
-├── Makefile          # Script d'assemblage, de compilation C et d'édition de liens
+├── Dockerfile        # Environnement de compilation (Rust nightly target i686, NASM, QEMU, Linker)
+├── Makefile          # Script d'assemblage (boot.asm), compilation Rust (kernel.rs) et d'édition de liens
 ├── linker.ld         # Script du Linker pour ordonner la mémoire physique (Multiboot 1MB)
 ├── boot.asm          # En-tête Multiboot 1 + Bootstrap Assembly 32-bit (Ring 0)
-├── kernel.c          # Point d'entrée du Noyau en C (Écriture directe en mémoire vidéo VGA 0xB8000)
-├── .gitignore        # Fichiers ignorés par Git (objets .o, binaires .elf, images ISO)
+├── kernel.rs         # Point d'entrée du Noyau en Rust #![no_std] (Écriture directe en mémoire VGA 0xB8000)
+├── build.sh          # Script de build automatique
+├── run.sh            # Script d'exécution automatique via QEMU
+├── .gitignore        # Fichiers ignorés par Git
 └── README.md         # Documentation du projet
 ```
 

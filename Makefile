@@ -1,14 +1,14 @@
-# Makefile for dokOS Bare-Metal Kernel
+# Makefile for dokOS Bare-Metal Kernel (Rust + Assembly)
 
 AS = nasm
-CC = gcc
+RUSTC = rustc
 LD = ld
 
 ASFLAGS = -f elf32
-CFLAGS = -m32 -ffreestanding -O2 -Wall -Wextra -nostdlib -fno-builtin -fno-stack-protector
+RUSTFLAGS = --target i686-unknown-none --crate-type staticlib -C opt-level=2
 LDFLAGS = -m elf_i386 -T linker.ld
 
-OBJS = boot.o kernel.o
+OBJS = boot.o libkernel.a
 OUTPUT = kernel.elf
 
 all: $(OUTPUT)
@@ -16,22 +16,14 @@ all: $(OUTPUT)
 boot.o: boot.asm
 	$(AS) $(ASFLAGS) boot.asm -o boot.o
 
-kernel.o: kernel.c
-	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
+libkernel.a: kernel.rs
+	$(RUSTC) $(RUSTFLAGS) kernel.rs -o libkernel.a
 
 $(OUTPUT): $(OBJS)
 	$(LD) $(LDFLAGS) -o $(OUTPUT) $(OBJS)
 
 clean:
-	rm -f *.o $(OUTPUT) iso_root/ dokOS.iso
-
-iso: $(OUTPUT)
-	mkdir -p iso_root/boot/grub
-	cp $(OUTPUT) iso_root/boot/kernel.elf
-	echo 'menuentry "dokOS" {' > iso_root/boot/grub/grub.cfg
-	echo '  multiboot /boot/kernel.elf' >> iso_root/boot/grub/grub.cfg
-	echo '}' >> iso_root/boot/grub/grub.cfg
-	grub-mkrescue -o dokOS.iso iso_root
+	rm -f *.o *.a $(OUTPUT) iso_root/ dokOS.iso
 
 qemu: $(OUTPUT)
 	qemu-system-i386 -kernel $(OUTPUT) -nographic

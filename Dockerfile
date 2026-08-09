@@ -21,7 +21,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     mtools \
     gdb \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Rust & bare-metal target i686-unknown-none
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup target add i686-unknown-none
 
 WORKDIR /workspace
 
