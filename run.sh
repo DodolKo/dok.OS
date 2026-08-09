@@ -14,4 +14,4 @@ echo "🖥️  Lancement de dokOS dans QEMU via Docker..."
 echo "ℹ️  (Pour quitter QEMU : presse 'Ctrl + A' puis 'X')"
 echo "---------------------------------------------------"
 
-docker run --rm -it -v "$(pwd)":/workspace ${IMAGE_NAME} make qemu
+docker run --rm -it --platform=linux/amd64 -v "$(pwd)":/workspace ${IMAGE_NAME} make qemu
