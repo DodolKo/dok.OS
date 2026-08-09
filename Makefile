@@ -5,7 +5,7 @@ RUSTC = rustc
 LD = ld
 
 ASFLAGS = -f elf32
-RUSTFLAGS = --target i686-unknown-none --crate-type staticlib -C opt-level=2
+RUSTFLAGS = --target i686-unknown-linux-gnu --crate-type staticlib -C opt-level=2
 LDFLAGS = -m elf_i386 -T linker.ld
 
 OBJS = boot.o libkernel.a
