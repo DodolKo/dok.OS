@@ -1,29 +1,11 @@
-# Makefile for dokOS Bare-Metal Kernel (Rust + Assembly)
+# Makefile for dokOS Bare-Metal Kernel
+# TODO: Écrire les règles de compilation pour le kernel.rs et boot.asm
 
-AS = nasm
-RUSTC = rustc
-LD = ld
-
-ASFLAGS = -f elf32
-RUSTFLAGS = --target i686-unknown-linux-gnu --crate-type staticlib -C opt-level=2 -C panic=abort
-LDFLAGS = -m elf_i386 -T linker.ld
-
-OBJS = boot.o libkernel.a
-OUTPUT = kernel.elf
-
-all: $(OUTPUT)
-
-boot.o: boot.asm
-	$(AS) $(ASFLAGS) boot.asm -o boot.o
-
-libkernel.a: kernel.rs
-	$(RUSTC) $(RUSTFLAGS) kernel.rs -o libkernel.a
-
-$(OUTPUT): $(OBJS)
-	$(LD) $(LDFLAGS) -o $(OUTPUT) $(OBJS)
+all:
+	@echo "Rien à compiler pour le moment ! C'est à toi de jouer."
 
 clean:
-	rm -f *.o *.a $(OUTPUT) iso_root/ dokOS.iso
+	rm -f *.o *.a *.elf iso_root/ dokOS.iso
 
-qemu: $(OUTPUT)
-	qemu-system-i386 -kernel $(OUTPUT) -nographic
+qemu:
+	@echo "Aucun kernel.elf à lancer dans QEMU pour le moment."
