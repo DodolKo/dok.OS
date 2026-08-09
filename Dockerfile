@@ -1,14 +1,8 @@
-FROM ubuntu:22.04
+# Use explicit amd64 (x86_64) architecture platform so that 32-bit/64-bit x86 packages 
+# (gcc-multilib, grub-pc-bin, qemu-system-x86) are available on Apple Silicon (ARM64 M1/M2/M3) Macs.
+FROM --platform=linux/amd64 ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# Essential toolchain for bare-metal OS development:
-# - build-essential (gcc, make, etc.)
-# - nasm (x86 assembly assembler)
-# - gcc-multilib / g++-multilib (to cross-compile 32-bit ELF targets cleanly on x86_64)
-# - qemu-system-x86 (lightweight hardware emulator for testing)
-# - grub-pc-bin, xorriso, mtools (to generate bootable ISO images with Multiboot)
-# - gdb (debugger for kernel stepping)
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
